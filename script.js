@@ -101,7 +101,7 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const line = intro.querySelector('.opening-track span');
   if (!reducedMotion && typeof line.animate === 'function') {
-    const animation = line.animate([{transform: 'scaleX(0)'}, {transform: 'scaleX(1)'}], {duration: 1100, easing: 'cubic-bezier(.2,.65,.35,1)', fill: 'forwards'});
+    const animation = line.animate([{transform: 'scaleX(0)', offset: 0}, {transform: 'scaleX(.22)', offset: .25}, {transform: 'scaleX(.65)', offset: .65}, {transform: 'scaleX(1)', offset: 1}], {duration: 4000, easing: 'cubic-bezier(.2,.65,.35,1)', fill: 'forwards'});
     animation.onfinish = finishOpening;
     animation.oncancel = finishOpening;
   } else {
