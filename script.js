@@ -1,11 +1,38 @@
 'use strict';
 (function () {
   const welcome = document.getElementById('welcome');
+  function openWelcome() {
+    if (welcome && typeof welcome.showModal === 'function' && !welcome.open) welcome.showModal();
+  }
+  const intro = document.createElement('div');
+  intro.className = 'opening-screen';
+  intro.setAttribute('role', 'dialog');
+  intro.setAttribute('aria-modal', 'true');
+  intro.setAttribute('aria-labelledby', 'opening-title');
+  intro.innerHTML = '<div class="opening-inner"><div class="opening-mark" aria-hidden="true">O /</div><p class="eyebrow">ORVANTA CASE REVIEW</p><h2 id="opening-title">Clarity starts with the facts.</h2><p>Your guide to country information<br>and document preparation.</p><div class="opening-track" aria-hidden="true"><span></span></div><p class="opening-caption">Opening your review guide</p><button type="button" class="text-button" id="opening-skip">Skip introduction</button></div>';
+  document.body.appendChild(intro);
+  const pageSections = Array.from(document.body.children).filter(function (element) { return element !== intro && element.tagName !== 'SCRIPT'; });
+  pageSections.forEach(function (element) { element.setAttribute('inert', ''); });
+  document.body.classList.add('opening-active');
+  let openingClosed = false;
+  function finishOpening() {
+    if (openingClosed) return;
+    openingClosed = true;
+    pageSections.forEach(function (element) { element.removeAttribute('inert'); });
+    document.body.classList.remove('opening-active');
+    intro.remove();
+    openWelcome();
+  }
+  intro.querySelector('button').addEventListener('click', finishOpening);
+  intro.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') finishOpening();
+    if (event.key === 'Tab') { event.preventDefault(); intro.querySelector('button').focus(); }
+  });
+  intro.querySelector('button').focus({preventScroll: true});
   if (welcome && typeof welcome.showModal === 'function') {
     const dismiss = function () { welcome.close(); document.querySelector('.hero .button').focus({preventScroll: true}); };
     document.getElementById('welcome-continue').addEventListener('click', dismiss);
     document.getElementById('welcome-skip').addEventListener('click', dismiss);
-    welcome.showModal();
   }
   const countries = {
     US: { name: 'United States', text: 'Keep the platform’s legal name, your state of residence, payment records, and any written promises. Federal and state reporting or legal routes may differ. Your bank can explain payment dispute procedures; a lawyer licensed in the relevant state can advise on legal rights and deadlines.' },
@@ -69,4 +96,15 @@
   // Native validation still runs; no network calls, storage, or form serialization occur.
   document.querySelectorAll('a[href^="#"]').forEach(function (link) { link.addEventListener('click', function () { const id = link.getAttribute('href').slice(1); if (!id) return; const target = document.getElementById(id); if (target && target.tagName === 'DETAILS') target.open = true; }); });
   document.getElementById('year').textContent = new Date().getFullYear();
+  // A short brand introduction, not a simulated case assessment or network task.
+  // The progress-like line is decorative; skipping never waits for an animation.
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const line = intro.querySelector('.opening-track span');
+  if (!reducedMotion && typeof line.animate === 'function') {
+    const animation = line.animate([{transform: 'scaleX(0)'}, {transform: 'scaleX(1)'}], {duration: 1100, easing: 'cubic-bezier(.2,.65,.35,1)', fill: 'forwards'});
+    animation.onfinish = finishOpening;
+    animation.oncancel = finishOpening;
+  } else {
+    finishOpening();
+  }
 })();
