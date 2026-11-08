@@ -64,7 +64,7 @@
   skip.addEventListener('click', function () { if (state.step === 0) state.country = ''; if (state.step === 1) state.issue = ''; if (state.step === 2) state.evidence = []; state.step++; render(true); });
   render(false);
   const form = document.getElementById('contact-form');
-  document.getElementById('demo-fields').disabled = false;
+  document.getElementById('contact-fields').disabled = false;
   form.addEventListener('submit', function (event) { event.preventDefault(); const result = document.getElementById('form-result'); result.textContent = 'Your request could not be sent. Please try again later'; result.focus(); });
   // Native validation still runs; no network calls, storage, or form serialization occur.
   document.querySelectorAll('a[href^="#"]').forEach(function (link) { link.addEventListener('click', function () { const id = link.getAttribute('href').slice(1); if (!id) return; const target = document.getElementById(id); if (target && target.tagName === 'DETAILS') target.open = true; }); });

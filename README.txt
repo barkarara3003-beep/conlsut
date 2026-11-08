@@ -17,7 +17,7 @@ BEFORE PUBLICATION
 - Obtain qualified review of the four policy drafts and local consumer/privacy rules.
 - Implement and test a secure submission backend, validation, abuse protection,
   retention/deletion processes, privacy disclosures, and truthful success/error states.
-- Replace the reserved .example email and remove demo notices only after launch readiness.
+- Add a verified operational contact before accepting enquiries.
 - Configure HTTPS and hosting security; audit hosting logs and any added cookies/trackers.
 - Test on physical iPhones/iPads, including the oldest supported Safari version,
   and with keyboard and screen readers. This package does not certify those devices.
